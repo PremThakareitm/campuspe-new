@@ -6,7 +6,7 @@ import { useToast } from '@/hooks/use-toast';
 // Simple form submission function 
 const sendEmail = async (email: string) => {
   // Get email recipient from environment variable
-  const recipient = import.meta.env.VITE_WAITLIST_RECIPIENT_EMAIL || 'premthakare96680@gmail.com';
+  const recipient = import.meta.env.VITE_WAITLIST_RECIPIENT_EMAIL || 'contactus@campuspe.com';
   
   // Create a FormData object for our request
   const data = new URLSearchParams();
@@ -115,12 +115,12 @@ const WaitlistForm = () => {
       <p className="text-slate-500 text-xs text-center mt-2">
         Having trouble? Email us directly at{' '}
         <a 
-          href={`mailto:premthakare96680@gmail.com?subject=CampusPe%20Waitlist%20Signup&body=Please%20add%20me%20to%20the%20waitlist.%20My%20email%20is:%20`}
+          href={`mailto:contactus@campuspe.com?subject=CampusPe%20Waitlist%20Signup&body=Please%20add%20me%20to%20the%20waitlist.%20My%20email%20is:%20`}
           className="text-emerald-600 hover:underline"
           target="_blank"
           rel="noopener noreferrer"
         >
-          premthakare96680@gmail.com
+          contactus@campuspe.com
         </a>
       </p>
     </div>
