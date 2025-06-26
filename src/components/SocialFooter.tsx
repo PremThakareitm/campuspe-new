@@ -5,8 +5,8 @@ import { Linkedin, Instagram, Twitter } from 'lucide-react';
 const SocialFooter = () => {
   const socialLinks = [
     { icon: Linkedin, href: 'https://www.linkedin.com/company/campupe-official/', label: 'LinkedIn', color: 'hover:text-blue-600' },
-    { icon: Instagram, href: '#', label: 'Instagram', color: 'hover:text-emerald-600' },
-    { icon: Twitter, href: '#', label: 'Twitter', color: 'hover:text-slate-700' },
+    { icon: Instagram, href: 'https://www.instagram.com/campuspe_official?igsh=dDQzb3ltZDZ0bWtj', label: 'Instagram', color: 'hover:text-emerald-600' },
+    { icon: Twitter, href: 'https://https://x.com/404', label: 'Twitter', color: 'hover:text-slate-700' },
   ];
 
   return (

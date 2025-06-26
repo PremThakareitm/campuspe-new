@@ -19,9 +19,9 @@ const Index = () => {
             </div>
             
             <div className="mb-12 animate-fade-in" style={{ animationDelay: '0.2s' }}>
-              <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-slate-800 mb-6 leading-tight tracking-tight">
-                CampusPe is <br />
-                <span className="bg-gradient-to-r from-blue-600 via-slate-700 to-emerald-600 bg-clip-text text-transparent">
+              <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold mb-6 leading-tight tracking-tight">
+                <span className="text-[#064BB3]">CampusPe is</span> <br />
+                <span className="bg-gradient-to-r from-[#0270DF] via-[#00AB9D] to-[#0D4091] bg-clip-text text-transparent">
                   Launching Soon
                 </span>
               </h1>
