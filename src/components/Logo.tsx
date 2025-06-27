@@ -8,13 +8,13 @@ const Logo = () => {
         <div className="text-center">
           <div className="flex justify-center">
             <img 
-              src="/logo.svg" 
+              src="/logo-1.svg" 
               alt="CampusPe Logo" 
-              className="h-10 md:h-12 w-auto mb-2"
+              className="h-20 md:h-24 w-auto mb-2"
             />
           </div>
-          <p className="text-gray-600 text-sm md:text-base mt-3 font-medium">
-            Connecting Students, Institutions & Companies
+          <p className="text-[#00AB9D] text-sm md:text-base mt-3 font-medium">
+            AI powered Campus Assistant
           </p>
           <div className="w-full h-1 bg-gradient-to-r from-[#0066cc] to-[#23aaa2] rounded-full mt-3"></div>
         </div>
