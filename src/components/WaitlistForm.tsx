@@ -11,7 +11,6 @@ const sendWhatsAppNotification = async (email: string) => {
   
   // Skip if not configured
   if (!accessToken || !phoneNumberId) {
-    console.log('WhatsApp notification skipped - not configured');
     return;
   }
   
@@ -41,11 +40,8 @@ const sendWhatsAppNotification = async (email: string) => {
       const errorData = await response.json();
       throw new Error(`WhatsApp API error: ${JSON.stringify(errorData)}`);
     }
-    
-    console.log('WhatsApp notification sent successfully');
   } catch (error) {
-    console.error('WhatsApp notification error:', error);
-    // Don't fail the submission if WhatsApp fails
+    // Silent fail - don't affect user experience
   }
 };
 
@@ -61,28 +57,7 @@ const WaitlistForm = () => {
     setIsSubmitting(true);
     
     try {
-      // First, test if our API is working
-      console.log('Testing API connection...');
-      try {
-        const testResponse = await fetch('/api/test', {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
-        
-        if (testResponse.ok) {
-          const testData = await testResponse.json();
-          console.log('Test API response:', testData);
-        } else {
-          console.warn('Test API failed:', testResponse.status, testResponse.statusText);
-        }
-      } catch (testError) {
-        console.error('Test API error:', testError);
-      }
-      
       // Store submission in localStorage as a backup
-      console.log(`Waitlist submission for: ${email}`);
       const submissions = JSON.parse(localStorage.getItem('waitlistSubmissions') || '[]');
       submissions.push({
         email: email,
@@ -94,7 +69,6 @@ const WaitlistForm = () => {
       const userEmailData = createUserConfirmationEmail(email);
       const adminEmailData = createAdminNotificationEmail(email);
       
-      console.log('Sending emails and WhatsApp notification...');
       await Promise.all([
         sendAzureEmail(userEmailData),
         sendAzureEmail(adminEmailData),
@@ -109,15 +83,13 @@ const WaitlistForm = () => {
       
       setEmail('');
     } catch (error) {
-      console.error('Error submitting email:', error);
-      
       // Store failed submission for retry
       try {
         const failedSubmissions = JSON.parse(localStorage.getItem('failedWaitlistSubmissions') || '[]');
         failedSubmissions.push({ email, timestamp: new Date().toString() });
         localStorage.setItem('failedWaitlistSubmissions', JSON.stringify(failedSubmissions));
       } catch (e) {
-        console.error('Error storing failed submission:', e);
+        // Silent fail for localStorage
       }
       
       toast({

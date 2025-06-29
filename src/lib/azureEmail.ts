@@ -12,11 +12,6 @@ interface EmailData {
 export const sendAzureEmail = async (emailData: EmailData) => {
   const fromEmail = import.meta.env.VITE_AZURE_FROM_EMAIL || 'DoNotReply@campuspe.com';
   
-  console.log('Sending email via Azure Communication Services...');
-  console.log('From:', fromEmail);
-  console.log('To:', emailData.to);
-  console.log('Subject:', emailData.subject);
-  
   try {
     // Try Azure Communication Services first
     const response = await fetch('/api/send-email', {
@@ -33,17 +28,12 @@ export const sendAzureEmail = async (emailData: EmailData) => {
       })
     });
 
-    console.log('Azure API response status:', response.status);
-    console.log('Azure API response headers:', Object.fromEntries(response.headers.entries()));
-
     if (response.ok) {
       return await response.json();
     } else {
       throw new Error(`Azure API error: ${response.status}`);
     }
   } catch (error) {
-    console.warn('Azure Communication Services failed, falling back to FormSubmit:', error);
-    
     // Fallback to FormSubmit
     return await sendFormSubmitEmail(emailData);
   }
@@ -84,13 +74,108 @@ export const createUserConfirmationEmail = (email: string) => {
         <meta charset="utf-8">
         <title>Welcome to CampusPE Waitlist</title>
         <style>
-            body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
-            .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-            .header { background: linear-gradient(135deg, #2563eb, #059669); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
-            .content { background: #f9fafb; padding: 30px; border-radius: 0 0 10px 10px; }
-            .logo { font-size: 24px; font-weight: bold; margin-bottom: 10px; }
-            .button { display: inline-block; background: linear-gradient(135deg, #2563eb, #059669); color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; margin: 20px 0; }
-            .footer { text-align: center; margin-top: 30px; color: #666; font-size: 14px; }
+            body { 
+                font-family: 'Inter', Arial, sans-serif; 
+                line-height: 1.6; 
+                color: #334155; 
+                margin: 0; 
+                padding: 0; 
+                background-color: #f8fafc;
+            }
+            .container { 
+                max-width: 600px; 
+                margin: 0 auto; 
+                padding: 20px; 
+                background-color: #ffffff;
+                border-radius: 16px;
+                box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            }
+            .header { 
+                background: linear-gradient(135deg, #0270DF 0%, #00AB9D 50%, #0D4091 100%); 
+                color: white; 
+                padding: 40px 30px; 
+                text-align: center; 
+                border-radius: 16px 16px 0 0; 
+                margin: -20px -20px 0 -20px;
+            }
+            .content { 
+                background: #ffffff; 
+                padding: 40px 30px; 
+                border-radius: 0 0 16px 16px; 
+            }
+            .logo { 
+                font-size: 28px; 
+                font-weight: 800; 
+                margin-bottom: 12px; 
+                letter-spacing: -0.5px;
+            }
+            .header h1 {
+                font-size: 32px;
+                font-weight: 700;
+                margin: 0;
+                text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            }
+            .button { 
+                display: inline-block !important; 
+                background: linear-gradient(135deg, #064BB3 0%, #0270DF 50%, #00AB9D 100%) !important; 
+                color: #ffffff !important; 
+                padding: 16px 32px !important; 
+                text-decoration: none !important; 
+                border-radius: 12px !important; 
+                margin: 24px 0 !important; 
+                font-weight: 600 !important;
+                font-size: 16px !important;
+                text-align: center !important;
+                border: none !important;
+                box-shadow: 0 4px 12px rgba(6, 75, 179, 0.3) !important;
+                transition: all 0.2s ease !important;
+            }
+            .button:hover {
+                box-shadow: 0 6px 16px rgba(6, 75, 179, 0.4) !important;
+                transform: translateY(-1px) !important;
+            }
+            .content h2 {
+                color: #064BB3;
+                font-size: 24px;
+                font-weight: 700;
+                margin-bottom: 20px;
+            }
+            .content h3 {
+                color: #0270DF;
+                font-size: 20px;
+                font-weight: 600;
+                margin: 24px 0 16px 0;
+            }
+            .content ul {
+                padding-left: 0;
+                list-style: none;
+            }
+            .content li {
+                padding: 8px 0;
+                padding-left: 24px;
+                position: relative;
+            }
+            .content li:before {
+                content: '✨';
+                position: absolute;
+                left: 0;
+                top: 8px;
+            }
+            .footer { 
+                text-align: center; 
+                margin-top: 40px; 
+                color: #64748b; 
+                font-size: 14px; 
+                border-top: 1px solid #e2e8f0;
+                padding-top: 24px;
+            }
+            .footer a {
+                color: #0270DF;
+                text-decoration: none;
+            }
+            .footer a:hover {
+                text-decoration: underline;
+            }
         </style>
     </head>
     <body>
@@ -102,26 +187,28 @@ export const createUserConfirmationEmail = (email: string) => {
             <div class="content">
                 <h2>Thank you for joining us!</h2>
                 <p>Hi there!</p>
-                <p>We're excited to have you on board for CampusPE - the future of college discovery and campus placements!</p>
+                <p>We're excited to have you on board for <strong>CampusPE</strong> - the future of college discovery and campus placements!</p>
                 
                 <h3>What's next?</h3>
                 <ul>
-                    <li>✨ You'll be among the first to know when we launch</li>
-                    <li>🚀 Get early access to our AI-powered platform</li>
-                    <li>📧 Receive exclusive updates about new features</li>
-                    <li>🎯 Priority access to beta testing opportunities</li>
+                    <li>You'll be among the first to know when we launch</li>
+                    <li>Get early access to our AI-powered platform</li>
+                    <li>Receive exclusive updates about new features</li>
+                    <li>Priority access to beta testing opportunities</li>
                 </ul>
                 
                 <p>We're working hard to revolutionize how students discover colleges and secure placements. Stay tuned!</p>
                 
-                <a href="https://campuspe.com" class="button">Visit Our Website</a>
+                <div style="text-align: center; margin: 32px 0;">
+                    <a href="https://campuspe.com" class="button" style="display: inline-block !important; background: linear-gradient(135deg, #064BB3 0%, #0270DF 50%, #00AB9D 100%) !important; color: #ffffff !important; padding: 16px 32px !important; text-decoration: none !important; border-radius: 12px !important; font-weight: 600 !important; font-size: 16px !important;">Visit Our Website</a>
+                </div>
                 
-                <p>Questions? Reply to this email or contact us at <a href="mailto:contactus@campuspe.com">contactus@campuspe.com</a></p>
+                <p>Questions? Reply to this email or contact us at <a href="mailto:contactus@campuspe.com" style="color: #0270DF;">contactus@campuspe.com</a></p>
                 
-                <p>Best regards,<br>The CampusPE Team</p>
+                <p><strong>Best regards,</strong><br>The CampusPE Team</p>
             </div>
             <div class="footer">
-                <p>CampusPE - AI Powered Campus Assistant<br>
+                <p><strong>CampusPE</strong> - AI Powered Campus Assistant<br>
                 Website: <a href="https://campuspe.com">campuspe.com</a></p>
                 <p><small>You received this email because you signed up for the CampusPE waitlist.</small></p>
             </div>
