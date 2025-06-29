@@ -1,6 +1,9 @@
 const { EmailClient } = require("@azure/communication-email");
 
 module.exports = async function (context, req) {
+    context.log('HTTP trigger function processed a request.');
+    context.log('Method:', req.method);
+    context.log('URL:', req.url);
     // CORS headers for all responses
     const corsHeaders = {
         "Access-Control-Allow-Origin": "*",

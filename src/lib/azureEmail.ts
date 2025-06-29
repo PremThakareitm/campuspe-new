@@ -8,31 +8,63 @@ interface EmailData {
   plainTextContent: string;
 }
 
-// Send email using Azure Communication Services
+// Send email using Azure Communication Services with FormSubmit fallback
 export const sendAzureEmail = async (emailData: EmailData) => {
   const fromEmail = import.meta.env.VITE_AZURE_FROM_EMAIL || 'DoNotReply@campuspe.com';
   
-  // Use the Azure Static Web Apps API endpoint
-  const response = await fetch('/api/send-email', {
+  try {
+    // Try Azure Communication Services first
+    const response = await fetch('/api/send-email', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        from: fromEmail,
+        to: emailData.to,
+        subject: emailData.subject,
+        htmlContent: emailData.htmlContent,
+        plainTextContent: emailData.plainTextContent
+      })
+    });
+
+    if (response.ok) {
+      return await response.json();
+    } else {
+      throw new Error(`Azure API error: ${response.status}`);
+    }
+  } catch (error) {
+    console.warn('Azure Communication Services failed, falling back to FormSubmit:', error);
+    
+    // Fallback to FormSubmit
+    return await sendFormSubmitEmail(emailData);
+  }
+};
+
+// FormSubmit fallback function
+const sendFormSubmitEmail = async (emailData: EmailData) => {
+  const formData = new FormData();
+  formData.append('email', emailData.to);
+  formData.append('_subject', emailData.subject);
+  formData.append('_template', 'box');
+  formData.append('_captcha', 'false');
+  formData.append('_next', window.location.href);
+  
+  // Convert HTML to plain text for FormSubmit
+  const plainText = emailData.plainTextContent || emailData.htmlContent.replace(/<[^>]*>/g, '');
+  formData.append('message', plainText);
+  formData.append('_replyto', 'contactus@campuspe.com');
+
+  const response = await fetch('https://formsubmit.co/' + emailData.to, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      from: fromEmail,
-      to: emailData.to,
-      subject: emailData.subject,
-      htmlContent: emailData.htmlContent,
-      plainTextContent: emailData.plainTextContent
-    })
+    body: formData
   });
 
   if (!response.ok) {
-    const errorData = await response.json();
-    throw new Error(`Email API error: ${errorData.error || 'Unknown error'}`);
+    throw new Error('FormSubmit fallback also failed');
   }
 
-  return await response.json();
+  return { success: true, method: 'formsubmit' };
 };
 
 // Template for user confirmation email
