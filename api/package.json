@@ -1,0 +1,15 @@
+{
+  "name": "campuspe-api",
+  "version": "1.0.0",
+  "description": "Azure Functions for CampusPE email notifications",
+  "main": "index.js",
+  "dependencies": {
+    "@azure/communication-email": "^1.0.0"
+  },
+  "scripts": {
+    "start": "func start",
+    "test": "echo \"No tests specified\""
+  },
+  "author": "CampusPE Team",
+  "license": "MIT"
+}

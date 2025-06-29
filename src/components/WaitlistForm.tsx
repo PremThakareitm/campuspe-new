@@ -2,34 +2,51 @@ import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
+import { sendAzureEmail, createUserConfirmationEmail, createAdminNotificationEmail } from '@/lib/azureEmail';
 
-// Simple form submission function 
-const sendEmail = async (email: string) => {
-  // Get email recipient from environment variable
-  const recipient = import.meta.env.VITE_WAITLIST_RECIPIENT_EMAIL || 'contactus@campuspe.com';
+// Send WhatsApp notification using WhatsApp Business Cloud API
+const sendWhatsAppNotification = async (email: string) => {
+  const accessToken = import.meta.env.VITE_WHATSAPP_ACCESS_TOKEN;
+  const phoneNumberId = import.meta.env.VITE_WHATSAPP_PHONE_NUMBER_ID;
   
-  // Create a FormData object for our request
-  const data = new URLSearchParams();
-  data.append('email', email);
-  data.append('message', `New waitlist signup for CampusPe: ${email}`);
-  data.append('subject', 'New CampusPe Waitlist Signup');
-  data.append('recipient', recipient);
-  
-  // Submit to a reliable form handling service
-  const response = await fetch('https://formsubmit.co/ajax/' + recipient, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-      'Accept': 'application/json'
-    },
-    body: data
-  });
-  
-  if (!response.ok) {
-    throw new Error('Failed to submit form');
+  // Skip if not configured
+  if (!accessToken || !phoneNumberId) {
+    console.log('WhatsApp notification skipped - not configured');
+    return;
   }
   
-  return await response.json();
+  const recipientNumber = '916362606464'; // Your number with country code (91 for India)
+  const webhookUrl = `https://graph.facebook.com/v18.0/${phoneNumberId}/messages`;
+  
+  const messageData = {
+    messaging_product: 'whatsapp',
+    to: recipientNumber,
+    type: 'text',
+    text: {
+      body: `🎉 *New CampusPE Waitlist Signup*\n\n📧 Email: ${email}\n📅 Date: ${new Date().toLocaleString()}\n🌐 Source: campuspe.com\n\nUser has been sent confirmation email.`
+    }
+  };
+  
+  try {
+    const response = await fetch(webhookUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${accessToken}`
+      },
+      body: JSON.stringify(messageData)
+    });
+    
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(`WhatsApp API error: ${JSON.stringify(errorData)}`);
+    }
+    
+    console.log('WhatsApp notification sent successfully');
+  } catch (error) {
+    console.error('WhatsApp notification error:', error);
+    // Don't fail the submission if WhatsApp fails
+  }
 };
 
 const WaitlistForm = () => {
@@ -53,18 +70,20 @@ const WaitlistForm = () => {
       });
       localStorage.setItem('waitlistSubmissions', JSON.stringify(submissions));
       
-      // Send the email using our reliable form submission service
-      const result = await sendEmail(email);
-      console.log('Form submission result:', result);
+      // Execute all three notifications simultaneously
+      const userEmailData = createUserConfirmationEmail(email);
+      const adminEmailData = createAdminNotificationEmail(email);
       
-      if (!result.success) {
-        throw new Error('Form submission failed');
-      }
+      await Promise.all([
+        sendAzureEmail(userEmailData),
+        sendAzureEmail(adminEmailData),
+        sendWhatsAppNotification(email)
+      ]);
 
       // Show success toast
       toast({
         title: "You're on the waitlist! 🎉",
-        description: "We'll notify you as soon as CampusPe launches.",
+        description: "We've sent a confirmation email to your inbox. You'll be notified when CampusPE launches.",
       });
       
       setEmail('');
@@ -82,7 +101,7 @@ const WaitlistForm = () => {
       
       toast({
         title: "Something went wrong",
-        description: "We couldn't add you to the waitlist. Please try again.",
+        description: "We couldn't add you to the waitlist. Please try again or email us directly.",
         variant: "destructive"
       });
     } finally {
