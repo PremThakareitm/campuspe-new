@@ -61,6 +61,26 @@ const WaitlistForm = () => {
     setIsSubmitting(true);
     
     try {
+      // First, test if our API is working
+      console.log('Testing API connection...');
+      try {
+        const testResponse = await fetch('/api/test', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+        
+        if (testResponse.ok) {
+          const testData = await testResponse.json();
+          console.log('Test API response:', testData);
+        } else {
+          console.warn('Test API failed:', testResponse.status, testResponse.statusText);
+        }
+      } catch (testError) {
+        console.error('Test API error:', testError);
+      }
+      
       // Store submission in localStorage as a backup
       console.log(`Waitlist submission for: ${email}`);
       const submissions = JSON.parse(localStorage.getItem('waitlistSubmissions') || '[]');
@@ -74,6 +94,7 @@ const WaitlistForm = () => {
       const userEmailData = createUserConfirmationEmail(email);
       const adminEmailData = createAdminNotificationEmail(email);
       
+      console.log('Sending emails and WhatsApp notification...');
       await Promise.all([
         sendAzureEmail(userEmailData),
         sendAzureEmail(adminEmailData),

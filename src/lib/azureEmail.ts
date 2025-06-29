@@ -12,6 +12,11 @@ interface EmailData {
 export const sendAzureEmail = async (emailData: EmailData) => {
   const fromEmail = import.meta.env.VITE_AZURE_FROM_EMAIL || 'DoNotReply@campuspe.com';
   
+  console.log('Sending email via Azure Communication Services...');
+  console.log('From:', fromEmail);
+  console.log('To:', emailData.to);
+  console.log('Subject:', emailData.subject);
+  
   try {
     // Try Azure Communication Services first
     const response = await fetch('/api/send-email', {
@@ -27,6 +32,9 @@ export const sendAzureEmail = async (emailData: EmailData) => {
         plainTextContent: emailData.plainTextContent
       })
     });
+
+    console.log('Azure API response status:', response.status);
+    console.log('Azure API response headers:', Object.fromEntries(response.headers.entries()));
 
     if (response.ok) {
       return await response.json();
