@@ -99,8 +99,8 @@ export const createUserConfirmationEmail = (email: string) => {
                 margin: -20px -20px 0 -20px;
             }
             .content { 
-                background: #ffffff; 
-                padding: 40px 30px; 
+                background: #F9FAFB;
+                padding: 20px 30px;
                 border-radius: 0 0 16px 16px; 
             }
             .logo { 
@@ -119,7 +119,7 @@ export const createUserConfirmationEmail = (email: string) => {
                 display: inline-block !important; 
                 background: linear-gradient(135deg, #064BB3 0%, #0270DF 50%, #00AB9D 100%) !important; 
                 color: #ffffff !important; 
-                padding: 16px 32px !important; 
+                padding: 16px 10px !important; 
                 text-decoration: none !important; 
                 border-radius: 12px !important; 
                 margin: 24px 0 !important; 
@@ -225,10 +225,10 @@ export const createUserConfirmationEmail = (email: string) => {
     We're excited to have you on board for CampusPE - the future of college discovery and campus placements!
     
     What's next?
-    - You'll be among the first to know when we launch
-    - Get early access to our AI-powered platform  
-    - Receive exclusive updates about new features
-    - Priority access to beta testing opportunities
+    - ✨ You'll be among the first to know when we launch
+    - 🚀 Get early access to our AI-powered platform
+    - 📧 Receive exclusive updates about new features
+    - 🎯 Priority access to beta testing opportunities
     
     We're working hard to revolutionize how students discover colleges and secure placements. Stay tuned!
     
