@@ -1,23 +1,15 @@
 User-agent: *
 Allow: /
 
-# Specific bot permissions
-User-agent: Googlebot
-Allow: /
-
-User-agent: Bingbot
-Allow: /
-
-User-agent: Twitterbot
-Allow: /
-
-User-agent: facebookexternalhit
-Allow: /
-
 # Sitemap location
 Sitemap: https://campuspe.com/sitemap.xml
 
-# Additional crawl optimization
+# Block old content
+Disallow: /domain-parking
+Disallow: /parking
+Disallow: /*.park
+
+# Crawl optimization
 Crawl-delay: 1
 
 Sitemap: https://campuspe.com/sitemap.xml
