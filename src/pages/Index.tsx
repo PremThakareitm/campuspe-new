@@ -20,13 +20,13 @@ const Index = () => {
             
             <div className="mb-12 animate-fade-in" style={{ animationDelay: '0.2s' }}>
               <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold mb-6 leading-tight tracking-tight">
-                <span className="text-[#064BB3]">CampusPe is</span> <br />
+                <span className="text-[#064BB3]">CampusPE is</span> <br />
                 <span className="bg-gradient-to-r from-[#0270DF] via-[#00AB9D] to-[#0D4091] bg-clip-text text-transparent">
                   Launching Soon
                 </span>
               </h1>
               <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl text-slate-700 font-semibold mb-4 leading-relaxed max-w-4xl mx-auto">
-                The future of college discovery and campus placements.
+                The future of college discovery and campus placements with AI-powered campus assistant.
               </p>
               <p className="text-sm sm:text-base md:text-lg lg:text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed">
                 Powered by <span className="text-emerald-600 font-semibold">AI</span> to connect students, colleges, and companies smarter than ever.
