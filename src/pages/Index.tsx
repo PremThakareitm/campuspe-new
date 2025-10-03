@@ -1,8 +1,8 @@
-
 import React from 'react';
 import AnimatedBackground from '@/components/AnimatedBackground';
 import Logo from '@/components/Logo';
 import WaitlistForm from '@/components/WaitlistForm';
+import CountdownTimer from '@/components/CountdownTimer';
 import SocialFooter from '@/components/SocialFooter';
 
 const Index = () => {
@@ -32,6 +32,7 @@ const Index = () => {
               </p>
             </div>
 
+            <div className="mb-12 animate-fade-in" style={{ animationDelay: '0.4s' }}> <CountdownTimer /> </div>
 
             <div className="animate-fade-in" style={{ animationDelay: '0.6s' }}>
               <WaitlistForm />
